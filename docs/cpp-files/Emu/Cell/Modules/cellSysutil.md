@@ -1,0 +1,120 @@
+# cellSysutil.h
+
+## 📄 文件信息
+
+- **路径**: `rpcs3/Emu/Cell/Modules/cellSysutil.h`
+- **类型**: 头文件
+- **行数**: 350 行
+
+## 🎯 功能概述
+
+PS3 HLE (High-Level Emulation) 模块实现。
+
+## 📋 主要内容
+
+### 类/结构体
+
+- `CellSysCacheParam`
+- `CellSysutilBgmPlaybackExtraParam`
+- `CellSysutilBgmPlaybackStatus`
+- `CellSysutilBgmPlaybackStatus2`
+- `SysutilEventStatus`
+
+### 关键函数
+
+- `sysutil_check_name_string()`
+- `sysutil_register_cb()`
+- `sysutil_register_cb_with_id()`
+- `sysutil_register_cb_with_id_internal()`
+- `sysutil_send_system_cmd()`
+- `sysutil_unregister_cb_with_id()`
+- `sysutil_unregister_cb_with_id_internal()`
+
+## 💻 代码片段
+
+```cpp
+#pragma once
+
+#include "Emu/Memory/vm_ptr.h"
+
+using CellSysutilUserId = u32;
+
+enum
+{
+	CELL_SYSUTIL_ERROR_BASE_INTERNAL              = 0x8002b000,
+	CELL_SYSUTIL_ERROR_BASE_COMMON                = 0x8002b100,
+	CELL_SYSUTIL_ERROR_BASE_SYSTEMPARAM           = 0x8002b200,
+	CELL_SYSUTIL_ERROR_BASE_MSGDIALOG             = 0x8002b300,
+	CELL_SYSUTIL_ERROR_BASE_SAVEDATA              = 0x8002b400,
+	CELL_SYSUTIL_ERROR_BASE_OSKDIALOG             = 0x8002b500,
+	CELL_SYSUTIL_ERROR_BASE_GAMEDATA              = 0x8002b600,
+	CELL_SYSUTIL_ERROR_BASE_AVC                   = 0x8002b700,
+	CELL_SYSUTIL_ERROR_BASE_NETCTL                = 0x8002b800,
+	CELL_SYSUTIL_ERROR_BASE_WEBBROWSER            = 0x8002b900,
+	CELL_SYSUTIL_ERROR_BASE_HDDGAME               = 0x8002ba00,
+	CELL_SYSUTIL_ERROR_BASE_SYSCONF               = 0x8002bb00,
+	CELL_SYSUTIL_ERROR_BASE_SYSCACHE              = 0x8002bc00,
+	CELL_SYSUTIL_ERROR_BASE_DISCGAME              = 0x8002bd00,
+	CELL_SYSUTIL_ERROR_BASE_STORAGEDATA           = 0x8002be00,
+	CELL_SYSUTIL_ERROR_BASE_IMEJP                 = 0x8002bf00,
+	CELL_SYSUTIL_ERROR_BASE_FILE_SELECT           = 0x8002c000,
+	CELL_SYSUTIL_ERROR_BASE_MUSIC                 = 0x8002c100,
+	CELL_SYSUTIL_ERROR_BASE_PHOTO_EXPORT_UTIL     = 0x8002c200,
+	CELL_SYSUTIL_ERROR_BASE_USERINFO              = 0x8002c300,
+	CELL_SYSUTIL_ERROR_BASE_PRINT                 = 0x8002c400,
+	CELL_SYSUTIL_ERROR_BASE_REC                   = 0x8002c500,
+	CELL_SYSUTIL_ERROR_BASE_MUSIC_EXPORT_UTIL     = 0x8002c600,
+	CELL_SYSUTIL_ERROR_BASE_PHOTO_IMPORT          = 0x8002c700,
+	CELL_SYSUTIL_ERROR_BASE_SEARCH                = 0x8002c800,
+	CELL_SYSUTIL_ERROR_BASE_PHOTO_DECODE          = 0x8002c900,
+	CELL_SYSUTIL_ERROR_BASE_VIDEO_EXPORT_UTIL     = 0x8002ca00,
+	CELL_SYSUTIL_ERROR_BASE_GAME                  = 0x8002cb00,
+	CELL_SYSUTIL_ERROR_BASE_GAMEUPDATE            = 0x8002cc00,
+	CELL_SYSUTIL_ERROR_BASE_AP                    = 0x8002cd00,
+	CELL_SYSUTIL_ERROR_BASE_COMBOPLAY             = 0x8002cd80,
+	CELL_SYSUTIL_ERROR_BASE_BGDL                  = 0x8002ce00,
+	CELL_SYSUTIL_ERROR_BASE_VIDEO_UPLOAD_UTIL     = 0x8002d000,
+	CELL_SYSUTIL_ERROR_BASE_SCREENSHOT            = 0x8002d100,
+	CELL_SYSUTIL_ERROR_BASE_AUTHDIALOG            = 0x8002d200,
+	CELL_SYSUTIL_ERROR_BASE_BGMPLAYBACK_EX        = 0x8002d300,
+	CELL_SYSUTIL_ERROR_BASE_SYSTEM_CHAT           = 0x8002d400,
+	CELL_SYSUTIL_ERROR_BASE_PHOTO_NETWORK_SHARING = 0x8002d500,
+};
+
+enum CellSysutilError : u32
+{
+	CELL_SYSUTIL_ERROR_TYPE       = 0x8002b101,
+	CELL_SYSUTIL_ERROR_VALUE      = 0x8002b102,
+	CELL_SYSUTIL_ERROR_SIZE       = 0x8002b103,
+	CELL_SYSUTIL_ERROR_NUM        = 0x8002b104,
+	CELL_SYSUTIL_ERROR_BUSY       = 0x8002b105,
+	CELL_SYSUTIL_ERROR_STATUS     = 0x8002b106,
+	CELL_SYSUTIL_ERROR_MEMORY     = 0x8002b107,
+	CELL_SYSUTIL_ERROR_3D_SUPPORT = 0x8002b108,
+};
+
+// Parameter IDs
+enum CellSysutilParamId: s32
+{
+	// Integers
+	CELL_SYSUTIL_SYSTEMPARAM_ID_LANG                            = 0x0111,
+	CELL_SYSUTIL_SYSTEMPARAM_ID_ENTER_BUTTON_ASSIGN             = 0x0112,
+	CELL_SYSUTIL_SYSTEMPARAM_ID_DATE_FORMAT                     = 0x0114,
+	CELL_SYSUTIL_SYSTEMPARAM_ID_TIME_FORMAT                     = 0x0115,
+	CELL_SYSUTIL_SYSTEMPARAM_ID_TIMEZONE                        = 0x0116,
+	CELL_SYSUTIL_SYSTEMPARAM_ID_SUMMERTIME                      = 0x0117,
+	CELL_SYSUTIL_SYSTEMPARAM_ID_GAME_PARENTAL_LEVEL             = 0x0121,
+	CELL_SYSUTIL_SYSTEMPARAM_ID_LICENSE_AREA                    = 0x0122,
+	CELL_SYSUTIL_SYSTEMPARAM_ID_GAME_PARENTAL_LEVEL0_RESTRICT   = 0x0123,
+	CELL_SYSUTIL_SYSTEMPARAM_ID_CURRENT_USER_HAS_NP_ACCOUNT     = 0x0141,
+	CELL_SYSUTIL_SYSTEMPARAM_ID_CAMERA_PLFREQ                   = 0x0151,
+	CELL_SYSUTIL_SYSTEMPARAM_ID_PAD_RUMBLE                      = 0x0152,
+	CELL_SYSUTIL_SYSTEMPARAM_ID_KEYBOARD_TYPE                   = 0x0153,
+	CELL_SYSUTIL_SYSTEMPARAM_ID_JAPANESE_KEYBOARD_ENTRY_METHOD  = 0x0154,
+	CELL_SYSUTIL_SYSTEMPARAM_ID_CHINESE_KEYBOARD_ENTRY_METHOD   = 0x0155,
+	CELL_SYSUTIL_SYSTEMPARAM_ID_PAD_AUTOOFF                     = 0x0156,
+```
+
+## 🔗 依赖头文件
+
+- `#include "Emu/Memory/vm_ptr.h"`

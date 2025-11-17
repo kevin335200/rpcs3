@@ -1,0 +1,43 @@
+# cellRemotePlay.h
+
+## 📄 文件信息
+
+- **路径**: `rpcs3/Emu/Cell/Modules/cellRemotePlay.h`
+- **类型**: 头文件
+- **行数**: 23 行
+
+## 🎯 功能概述
+
+PS3 HLE (High-Level Emulation) 模块实现。
+
+## 📋 主要内容
+
+## 💻 代码片段
+
+```cpp
+#pragma once
+
+enum CellRemotePlayError : u32
+{
+	CELL_REMOTEPLAY_ERROR_INTERNAL = 0x80029830
+};
+
+enum
+{
+	CELL_REMOTEPLAY_STATUS_LOADING    = 0x00000000,
+	CELL_REMOTEPLAY_STATUS_WAIT       = 0x00000001,
+	CELL_REMOTEPLAY_STATUS_RUNNING    = 0x00000002,
+	CELL_REMOTEPLAY_STATUS_UNLOADING  = 0x00000003,
+	CELL_REMOTEPLAY_STATUS_FATALERROR = 0x00000004,
+	CELL_REMOTEPLAY_STATUS_PREMOEND   = 0x00000005,
+};
+
+enum
+{
+	CELL_REMOTEPLAY_M4V_MEMORY_CONTAINER_SIZE  = 8 * 1024 * 1024,
+	CELL_REMOTEPLAY_AVC_MEMORY_CONTAINER_SIZE  = 10 * 1024 * 1024,
+	CELL_REMOTEPLAY_480P_MEMORY_CONTAINER_SIZE = 10 * 1024 * 1024,
+};
+
+```
+
